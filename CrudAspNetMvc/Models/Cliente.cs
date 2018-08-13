@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using CrudAspNetMvc.Attributes;
 
 namespace CrudAspNetMvc.Models
 {
@@ -18,7 +19,7 @@ namespace CrudAspNetMvc.Models
 
         [Required(ErrorMessage = "Esse campo deve ser preenchido.")]
         [StringLength(14, ErrorMessage = "Esse campo deve ter 14 caracteres com pontos e traços.")]
-        //[CPFValido(ErrorMessage = "CPF inválido")]
+        [CPFValido(ErrorMessage = "CPF inválido")]
         public string CPF { get; set; }
 
         [MaxLength(100, ErrorMessage = "Esse campo deve ter até 100 caracteres.")]
