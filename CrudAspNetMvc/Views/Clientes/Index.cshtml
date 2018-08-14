@@ -1,99 +1,79 @@
-﻿@model IEnumerable<CrudAspNetMvc.Models.Cliente>
+﻿@using X.PagedList.Mvc;
+@model X.PagedList.PagedList<CrudAspNetMvc.Models.Cliente>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="page-header">
+    <h2>Clientes cadastrados</h2>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+<div class="row">
+    <div class="col-md-6">
+        @Html.ActionLink("Novo cliente", "Create", null, new { @class = "btn btn-primary" })
+    </div>
+    <div class="col-md-6">
+        @using (Html.BeginForm("Index", "Clientes", FormMethod.Get))
+        {
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar cliente" required name="busca" value="@ViewBag.Busca">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        }
+    </div>
+</div>
+
+<hr />
+
+<table class="table table-condensed table-hover">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Nome)
+            Nome
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Sexo)
+            CPF
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CPF)
+            Email
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Telefone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Logradouro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Numero)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Complemento)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Bairro)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cidade)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EstadoCivil)
+            Telefone
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sexo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CPF)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telefone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Logradouro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Numero)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Complemento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Bairro)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cidade)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EstadoCivil)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model) { 
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CPF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefone)
+            </td>
 
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id})" class="btn btn-primary btn-sm" title="Editar">
+                    <span class="glyphicon glyphicon-file"></span>
+                </a>
+                <a href="@Url.Action("Delete", new { id = item.Id})" class="btn btn-danger btn-sm" title="Excluir">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </td>
+        </tr>
+}
 </table>
+
+@Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, busca = ViewBag.Busca}))
+
+@*@Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, busca = ViewBag.Busca }))*@

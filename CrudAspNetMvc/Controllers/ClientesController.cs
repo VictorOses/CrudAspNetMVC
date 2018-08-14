@@ -56,7 +56,7 @@ namespace CrudAspNetMvc.Controllers
                             .OrderBy(c => c.Nome)
                             .ToPagedList(pagina, 10);
 
-            return View(db.Clientes.ToList());
+            return View(cliente);
         }
 
         // GET: Clientes/Details/5
