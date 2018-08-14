@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CrudAspNetMvc.Models;
+using X.PagedList;
 
 namespace CrudAspNetMvc.Controllers
 {
@@ -46,8 +47,15 @@ namespace CrudAspNetMvc.Controllers
          };
 
         // GET: Clientes
-        public ActionResult Index()
+        public ActionResult Index(string busca = "", int pagina = 1)
         {
+            ViewBag.Busca = busca;
+
+            var cliente = db.Clientes
+                            .Where(c => c.Nome.Contains(busca) || c.CPF == busca)
+                            .OrderBy(c => c.Nome)
+                            .ToPagedList(pagina, 10);
+
             return View(db.Clientes.ToList());
         }
 
@@ -80,6 +88,11 @@ namespace CrudAspNetMvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Nome,Sexo,CPF,Email,Telefone,Logradouro,Numero,Complemento,Bairro,Cidade,Estado,EstadoCivil")] Cliente cliente)
         {
+            if(db.Clientes.Count(c => c.CPF == cliente.CPF) > 0)
+            {
+                ModelState.AddModelError("CPF", "Esse CPF já está em uso");
+            }
+
             if (ModelState.IsValid)
             {
                 db.Clientes.Add(cliente);
